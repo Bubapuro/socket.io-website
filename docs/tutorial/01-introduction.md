@@ -1,3 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pixel War Game</title>
+    <style>
+        canvas {
+            border: 2px solid black;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas" width="800" height="800"></canvas>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const pixelSize = 20; // Piksel boyutu
+        const rows = canvas.height / pixelSize;
+        const cols = canvas.width / pixelSize;
+        const grid = Array.from({ length: rows }, () => Array(cols).fill(null)); // Harita ızgarası
+
+        // Oyuncu rengi
+        const playerColor = 'blue';
+        let playerX = Math.floor(cols / 2);
+        let playerY = Math.floor(rows / 2);
+
+        // Haritayı çizme fonksiyonu
+        function drawGrid() {
+            for (let row = 0; row < rows; row++) {
+                for (let col = 0; col < cols; col++) {
+                    if (grid[row][col]) {
+                        ctx.fillStyle = grid[row][col];
+                        ctx.fillRect(col * pixelSize, row * pixelSize, pixelSize, pixelSize);
+                    }
+                }
+            }
+        }
+
+        // Oyuncu hareketi
+        function movePlayer(x, y) {
+            if (x >= 0 && x < cols && y >= 0 && y < rows) {
+                grid[playerY][playerX] = null; // Eski pozisyonu temizle
+                playerX = x;
+                playerY = y;
+                grid[playerY][playerX] = playerColor; // Yeni pozisyona oyuncuyu yerleştir
+                drawGrid();
+            }
+        }
+
+        // Klavye ile hareket
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowUp') movePlayer(playerX, playerY - 1);
+            if (e.key === 'ArrowDown') movePlayer(playerX, playerY + 1);
+            if (e.key === 'ArrowLeft') movePlayer(playerX - 1, playerY);
+            if (e.key === 'ArrowRight') movePlayer(playerX + 1, playerY);
+        });
+
+        // Başlangıçta haritayı çiz
+        grid[playerY][playerX] = playerColor;
+        drawGrid();
+    </script>
+</body>
+</html>
 ---
 title: Tutorial - Introduction
 sidebar_label: Introduction
